@@ -1,4 +1,7 @@
-var topic = ["Dog", "Cat", "Birds"]
+var topic = ["Llama", "Tortoise", "Goats"]
+
+
+
 
 function renderButtons(){
 
@@ -22,6 +25,13 @@ function renderButtons(){
 
 }
 
+
+
+
+
+
+
+
 $("#search-button").on("click",function(){
     var inputsearch = $("#search-input").val()
     console.log(inputsearch)
@@ -33,13 +43,17 @@ $("#search-button").on("click",function(){
 )
 
 
+
+
+
+
 function searchGif(search){
     console.log(search)
 
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-    search + "&api_key=ZGg4cOR9OgsirAFDYQ0srqXu3w9fdTm3&limit=10";
+    search + "&api_key=iP07Elte12nW9QCw9h0vllRZUq7UxV1O&limit=10";
 
-  
+ 
     $.ajax({
         url: queryURL,
         method:"get"
@@ -58,19 +72,39 @@ function renderGifs(animals){
     $("#gif-area").empty()
 
     for (i=0; i<animals.length; i++ ){
-        $("#gif-area").append(`<img class="gifs" src="${animals[i].images.downsized_still.url}"  source="${animals[i].images.downsized.url}">`)
+        var animalImgs = $("<img>")
+        var still = animals[i].images.fixed_height_still.url
+        var animated = animals[i].images.fixed_height.url
+        animalImgs.attr ("src",still)
+        animalImgs.attr ("data-still",still)
+        animalImgs.attr ("data-animate", animated)
+        amimalImgs.attr ("data-state","still")
+        $("#gif-area").append(animalImgs)
     }
 
    
-    
-    $(".gifs").on("click",function(){
-        console.log(this)
+  
+}
 
+ 
+    $(document).on("click",".gifs", function(){
+        console.log(this)
+        console.log("getting to this point")
+
+        var state = $(this).attr("data-state")
+        if (state === "still"){
+            $(this).attr("src",$(this).attr("data-animate"))
+            $(this).attr("data-state","animate")
+
+        } else if(state === animate){
+            $(this).attr("src",$(this).attr("data-still"))
+            $(this).attr("data-state","still")
+        }
         var src = $(this).attr("src")
         var source = $(this).attr("source")
+
         $(this).attr("src", source)
         $(this).attr("source", src)
     })
-}
 
 renderButtons()
